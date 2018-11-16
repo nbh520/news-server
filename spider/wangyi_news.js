@@ -4,27 +4,35 @@ const iconv = require('iconv-lite')
 
 class WangYiSpider {
   constructor() {}
-  start() {
-    let html = ''
+  start(req, res, next) {
+    let strUrl = '' //传入过来的数据转成URL
+    const article = {
+      year: req.params.year,
+      day: req.params.day,
+      hour: req.params.hour,
+      article: req.params.article
+    };
+    Object.keys(article).forEach(key => {
+      strUrl = strUrl + article[key] + '/'
+    })
+    strUrl = strUrl.substr(0, strUrl.lastIndexOf('/'))
+    const url = 'http://3g.163.com/news/' + strUrl + '.html'
+    //爬取网易文章数据
     request({
-      url: 'http://3g.163.com/news/18/1115/10/E0L8BNJR000189FH.html',
+      url,
       encoding: null
     }, function (error, response, body) {
       if (!error && response.statusCode === 200) {
-        parseHtml(body)
+        let $ = cheerio.load(body, {
+          decodeEntities: false
+        })
+        let html = `<div class='head'>${$('article .head').html()}</div>
+            <div class = 'content' > ${$("article .content").html()} </div>`;
+        res.send(html)
       }
     })
-
-    function parseHtml(data) {
-      let $ = cheerio.load(data, {
-        decodeEntities: false
-      })
-      html = `<div class='head'>${$('article .head').html()}</div>
-            <div class = 'content' > ${$("article .content").html()} </div>`;
-      res.send(html)
-    }
   }
 
 }
 
-export default new WangYiSpider()
+module.exports = new WangYiSpider()
