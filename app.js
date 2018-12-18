@@ -5,10 +5,10 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
 var dv = require('./mongodb/db')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+// var indexRouter = require('./routes/index')
+import indexRouter from './routes/index'
 var app = express();
+
 
 // app.all("*", function (req, res, next) {
 //   if (!req.get("Origin")) return next();
@@ -47,8 +47,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+indexRouter(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

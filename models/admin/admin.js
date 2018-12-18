@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
-  user_name: String,
+  username: String,
   password: String,
   id: Number,
   create_time: String,

@@ -4,7 +4,8 @@ const ajax = require('../api/ajax')
 const request = require('request')
 const cheerio = require('cheerio')
 const WangYiSpider = require('../spider/wangyi_news')
-
+// const admin = require('./admin')
+import admin from './admin'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -56,4 +57,7 @@ router.get('/user', function (req, res, next) {
 
 
 
-module.exports = router;
+// module.exports = router;
+export default app => {
+  app.use('/admin', admin)
+}

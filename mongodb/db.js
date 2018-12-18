@@ -1,4 +1,3 @@
-let config = require('../config/dev')
 const mongoose = require('mongoose')
 const DB_URL = 'mongodb://localhost/news'
 mongoose.connect(DB_URL)
