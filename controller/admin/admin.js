@@ -34,9 +34,48 @@ class Admin {
         return
       }
       const newPassword = this.encryption(password)
-      res.send({
-        newPassword
-      })
+      try{
+        const admin = await AdminModel.findOne({username})
+        if(!admin){
+          const adminTip = status == 1 ? '管理员' : '超级管理员'
+          const admin_id = await this.getId('admin_id')
+          const cityInfo = await this.guessPosition(req);
+          const newAdmin = {
+            username,
+            password: newPassword,
+            id: admin_id,
+            create_time: new Date(),
+            admin: adminTip,
+            status,
+            city: cityInfo.city
+          }
+          await AdminModel.create(newAdmin)
+          req.session.admin.id = admin_id
+          res.send({
+            status: 1,
+            success: '注册管理员成功',
+          })
+        }else if(newPassword.toString() !== admin.password.toString()){
+          res.send({
+            status: 0,
+            type: 'ERROR_PASSWORD',
+            message: '密码错误'
+          })
+        }else{
+          req.session.admin_id = admin.id
+          res.send({
+            status: 1,
+            success: '登录成功'
+          })
+        }
+      }catch(err){
+        res.send({
+          status: 0,
+          type: 'LOGIN_ADMIN_FAILED',
+          message: '登录管理员失败'
+        })
+      }
+      
     })
   }
   encryption(password){
