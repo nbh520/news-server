@@ -1,10 +1,11 @@
 'use strict'
 import AdminModel from '../../models/admin/admin'
 import formidable from 'formidable'
+import AddressComponent from '../../prototype/addressComponent'
 import crypto from 'crypto'
-class Admin {
+class Admin extends AddressComponent {
   constructor() {
-    // super()
+    super()
     this.login = this.login.bind(this)
     this.encryption = this.encryption.bind(this)
   }
@@ -76,6 +77,12 @@ class Admin {
         })
       }
       
+    })
+  }
+  async getPosition(req, res, next){
+    const cityInfo = await super.guessPosition(req)
+    res.send({
+      success: cityInfo
     })
   }
   encryption(password){

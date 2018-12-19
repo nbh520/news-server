@@ -10,4 +10,5 @@ router.get('/test', function (req, res, next) {
   res.send('success')
 })
 router.post('/login', Admin.login);
+router.get('/getPosition',Admin.getPosition);
 export default router
