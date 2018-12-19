@@ -14,9 +14,7 @@ const adminSchema = new Schema({
   city: String
 })
 
-adminSchema.index({
-  id: 1
-});
+adminSchema.index({id: 1}, {unique: true});
 const Admin = mongoose.model('Admin', adminSchema);
 
 export default Admin

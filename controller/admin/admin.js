@@ -46,7 +46,7 @@ class Admin extends AddressComponent {
           const newAdmin = {
             username,
             password: newPassword,
-            id: 4,
+            // id: 4,
             create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             admin: adminTip,
