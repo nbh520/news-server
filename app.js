@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
 var dv = require('./mongodb/db')
-// var indexRouter = require('./routes/index')
 import indexRouter from './routes/index'
+
+
+
 var app = express();
 
 
@@ -41,6 +43,8 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 

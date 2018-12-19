@@ -1,13 +1,15 @@
-'use strict'
+// 'use strict'
 import AdminModel from '../../models/admin/admin'
 import formidable from 'formidable'
 import AddressComponent from '../../prototype/addressComponent'
 import crypto from 'crypto'
+import moment from 'moment'
 class Admin extends AddressComponent {
   constructor() {
     super()
     this.login = this.login.bind(this)
     this.encryption = this.encryption.bind(this)
+    this.getPosition = this.getPosition.bind(this)
   }
   async login(req, res, next) {
     const form = new formidable.IncomingForm();
@@ -39,23 +41,25 @@ class Admin extends AddressComponent {
         const admin = await AdminModel.findOne({username})
         if(!admin){
           const adminTip = status == 1 ? '管理员' : '超级管理员'
-          const admin_id = await this.getId('admin_id')
-          const cityInfo = await this.guessPosition(req);
+          // const admin_id = await this.getId('admin_id')
+          const cityInfo = await this.guessPosition(req) //获取城市信息
           const newAdmin = {
             username,
             password: newPassword,
-            id: admin_id,
-            create_time: new Date(),
+            id: 4,
+            create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+            update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             admin: adminTip,
             status,
             city: cityInfo.city
           }
           await AdminModel.create(newAdmin)
-          req.session.admin.id = admin_id
+          // req.session.admin.id = admin_id
           res.send({
             status: 1,
             success: '注册管理员成功',
           })
+          console.log(cityInfo.city)
         }else if(newPassword.toString() !== admin.password.toString()){
           res.send({
             status: 0,
@@ -63,7 +67,7 @@ class Admin extends AddressComponent {
             message: '密码错误'
           })
         }else{
-          req.session.admin_id = admin.id
+          // req.session.admin_id = admin.id
           res.send({
             status: 1,
             success: '登录成功'
@@ -75,14 +79,15 @@ class Admin extends AddressComponent {
           type: 'LOGIN_ADMIN_FAILED',
           message: '登录管理员失败'
         })
+        console.log(err)
       }
       
     })
   }
   async getPosition(req, res, next){
-    const cityInfo = await super.guessPosition(req)
+    const cityInfo = await this.guessPosition(req)
     res.send({
-      success: cityInfo
+      success: 'cityInfo'
     })
   }
   encryption(password){
