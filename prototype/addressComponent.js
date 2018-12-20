@@ -12,9 +12,9 @@ class AddressComponent extends BaseComponent {
     return new Promise(async (resolve, reject) => {
       let ip
       const defaultIp = '171.43.196.37'
-      if(process.env.NODE_ENV === 'development'){
-        ip = defaultIp
-      } else {
+      // if(process.env.NODE_ENV === 'development'){
+      //   ip = defaultIp
+      // } else {
         try {
           ip = req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
           req.connection.remoteAddress || // 判断 connection 的远程 IP
@@ -24,7 +24,7 @@ class AddressComponent extends BaseComponent {
           ip = ipArr[ipArr.length - 1] || defaultIp
         } catch (err) {
           ip = defaultIp
-        }
+        // }
       }
       try{
         let result = await super.fetch('https://apis.map.qq.com/ws/location/v1/ip',{
