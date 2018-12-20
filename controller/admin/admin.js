@@ -41,12 +41,12 @@ class Admin extends AddressComponent {
         const admin = await AdminModel.findOne({username})
         if(!admin){
           const adminTip = status == 1 ? '管理员' : '超级管理员'
-          // const admin_id = await this.getId('admin_id')
+          const admin_id = await this.getId('admin_id')
           const cityInfo = await this.guessPosition(req) //获取城市信息
           const newAdmin = {
             username,
             password: newPassword,
-            // id: 4,
+            id: admin_id,
             create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             admin: adminTip,
@@ -58,6 +58,7 @@ class Admin extends AddressComponent {
           res.send({
             status: 1,
             success: '注册管理员成功',
+            city: cityInfo.city
           })
           console.log(cityInfo.city)
         }else if(newPassword.toString() !== admin.password.toString()){

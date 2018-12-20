@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
-
+import Ids from '../models/ids'
 
 export default class BaseComponent{
   constructor(){
-    this.idList = ['admin_id']
+    this.idList = ['admin_id','article_id','comment_id']
   }
   async fetch(url = '', data = {}, type = 'GET', resType = 'JSON'){
     type = type.toUpperCase()
@@ -47,13 +47,20 @@ export default class BaseComponent{
 
   //获取id列表
   async getId(type){
+    console.log(type)
     if(!this.idList.includes(type)){
       throw new Error('id类型错误');
       return 
     }
     try{
+      const idData = await Ids.findOne();
+      idData[type]++;
+      await idData.save();
+      return idData[type]
+    }catch(err){
+      console.log('获取ID数据失败');
+      throw new Error(err)
+    }
       
-    }catch(err){}
-
   }
 }

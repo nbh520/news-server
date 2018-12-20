@@ -6,6 +6,7 @@ const cheerio = require('cheerio')
 const WangYiSpider = require('../spider/wangyi_news')
 // const admin = require('./admin')
 import admin from './admin'
+import test from './test'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -60,4 +61,6 @@ router.get('/user', function (req, res, next) {
 // module.exports = router;
 export default app => {
   app.use('/admin', admin)
+  app.use('/test',test)
+
 }
