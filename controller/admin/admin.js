@@ -11,6 +11,7 @@ class Admin extends AddressComponent {
     this.encryption = this.encryption.bind(this)
     this.getPosition = this.getPosition.bind(this)
   }
+  //登录
   async login(req, res, next) {
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -85,12 +86,14 @@ class Admin extends AddressComponent {
       
     })
   }
+  
   async getPosition(req, res, next){
     const cityInfo = await this.guessPosition(req)
     res.send({
       success: 'cityInfo'
     })
   }
+
   encryption(password){
     const newPassword = this.Md5(this.Md5(password).substr(2, 7) + this.Md5(password))
     return newPassword

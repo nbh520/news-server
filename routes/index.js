@@ -7,6 +7,7 @@ const WangYiSpider = require('../spider/wangyi_news')
 // const admin = require('./admin')
 import admin from './admin'
 import test from './test'
+import article from './article'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -62,5 +63,6 @@ router.get('/user', function (req, res, next) {
 export default app => {
   app.use('/admin', admin)
   app.use('/test',test)
+  app.use('/article', article)
 
 }
