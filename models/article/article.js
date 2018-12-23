@@ -10,6 +10,7 @@ const articleSchema = new Schema({
   update_time: String,
   author: String,
   title: String,
+  source_id: Number, //来源的ID， 用来判读是否重复
   user_id: Number,   // 作者id
   coverImg: [],  // 封面图片
   clickCount: {type: Number, default: 0},    //点击量

@@ -14,6 +14,7 @@ class Article extends BaseComponent{
       result
     })
   }
+  //获取今日头条新闻
   getTodayNews(){
     
   }
