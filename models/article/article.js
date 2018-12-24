@@ -9,7 +9,7 @@ const articleSchema = new Schema({
   create_time: String,
   update_time: String,
   author: String,
-  title: String,
+  title: String,    //文章标题
   source_id: Number, //来源的ID， 用来判读是否重复
   user_id: Number,   // 作者id
   coverImg: [],  // 封面图片
