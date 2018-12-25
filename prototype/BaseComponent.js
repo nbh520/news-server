@@ -55,7 +55,7 @@ export default class BaseComponent{
     try{
       const idData = await Ids.findOne();
       idData[type]++;
-      await idData.save();
+      idData.save();
       return idData[type]
     }catch(err){
       console.log('获取ID数据失败');
