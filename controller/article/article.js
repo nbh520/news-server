@@ -28,7 +28,7 @@ class Article extends BaseComponent{
           category: '暂无',
           content: data.source_url
         }
-        // await ArticleModel.create(newArticle)
+        await ArticleModel.create(newArticle)
         console.log(article_id)
       })
       
