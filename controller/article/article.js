@@ -10,7 +10,7 @@ class Article extends BaseComponent{
     this.addArticle = this.addArticle.bind(this)
   }
   async addArticle(req, res, next){
-    let result = await super.fetch('http://www.toutiao.com/api/pc/feed/?category=news_tech&utm_source=toutiao&widen=1&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A155493CA8EBB0F&cp=59C84BEB601F7E1')
+    let result = await this.fetch('http://www.toutiao.com/api/pc/feed/?category=news_tech&utm_source=toutiao&widen=1&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A155493CA8EBB0F&cp=59C84BEB601F7E1')
     let data = result.data
 
     try{
