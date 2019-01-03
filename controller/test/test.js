@@ -1,3 +1,4 @@
+/** 测试 */
 import BaseComponent from '../../prototype/BaseComponent'
 import Comment from '../../models/comment/comment'
 
