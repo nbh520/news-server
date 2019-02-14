@@ -14,22 +14,23 @@ class Article extends BaseComponent{
     let data = result.data
 
     try{
-      data.forEach(async data => {
-        const article_id = await this.getId('article_id').then(item => console.log(article_id))
-        let newArticle = {
-          id: article_id,
-          create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-          update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-          author: data.source,
-          title: data.title,
-          source_id: data.item_id,
-          user_id: 0,
-          coverImg: data.image_list,
-          category: '暂无',
-          content: data.source_url
-        }
-        await ArticleModel.create(newArticle)
-        console.log(article_id)
+      data.forEach(data => {
+        const article_id = this.getId('article_id').then(res => console.log('result ' + article_id))
+
+        // let newArticle = {
+        //   id: article_id,
+        //   create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        //   update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        //   author: data.source,
+        //   title: data.title,
+        //   source_id: data.item_id,
+        //   user_id: 0,
+        //   coverImg: data.image_list,
+        //   category: '暂无',
+        //   content: data.source_url
+        // }
+        // await ArticleModel.create(newArticle)
+        // console.log('result ' + article_id)
       })
       
     }catch(err){

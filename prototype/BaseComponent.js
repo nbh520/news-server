@@ -47,7 +47,6 @@ export default class BaseComponent{
 
   //获取id列表
   async getId(type){
-    console.log(type)
     if(!this.idList.includes(type)){
       throw new Error('id类型错误');
       return 
@@ -56,6 +55,7 @@ export default class BaseComponent{
       const idData = await Ids.findOne();
       idData[type]++;
       idData.save();
+      console.log("执行")
       return idData[type]
     }catch(err){
       console.log('获取ID数据失败');
