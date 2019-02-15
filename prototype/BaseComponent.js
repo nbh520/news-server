@@ -55,12 +55,24 @@ export default class BaseComponent{
       const idData = await Ids.findOne();
       idData[type]++;
       idData.save();
-      console.log("执行")
+      console.log("执行:" + idData[type])
       return idData[type]
     }catch(err){
       console.log('获取ID数据失败');
       throw new Error(err)
     }
-      
+  }
+  async getIds(type) {
+    try {
+      const idData = await Ids.findOne();
+      console.log(idData)
+      // idData[type]++;
+      // idData.save();
+      // console.log("执行:" + idData[type])
+      // return idData[type]
+    } catch (err) {
+      console.log('获取ID数据失败');
+      throw new Error(err)
+    }
   }
 }
