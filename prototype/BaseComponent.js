@@ -62,9 +62,9 @@ export default class BaseComponent{
       throw new Error(err)
     }
   }
-  async getIds(type) {
+  getIds(type) {
     try {
-      const idData = await Ids.findOne();
+      const idData = Ids.findOne();
       console.log(idData)
       // idData[type]++;
       // idData.save();

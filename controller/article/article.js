@@ -3,6 +3,7 @@
 import ArticleModel from '../../models/article/article'
 import BaseComponent from '../../prototype/BaseComponent'
 import moment from 'moment'
+import Today from '../../spider/TodayHeadline'
 
 class Article extends BaseComponent{
   constructor(){
@@ -32,12 +33,21 @@ class Article extends BaseComponent{
       //   // await ArticleModel.create(newArticle)
       //   // console.log('result ' + article_id)
       // })
-      for(let i = 0; i < 10; i++){
-        const article_id = await this.getId('article_id').then(res => console.log(res))
-        // console.log(article_id)
-      }
-      
-      
+      // let value = 0;
+      // for(let i = 0; i < 10; i++){
+      //   console.log(`第${i+1}条数据录入成功`)
+        let article_id;
+        try{
+          article_id = await this.getId('article_id')
+          console.log(article_id)
+          article_id = await this.getId('article_id')
+          console.log(article_id)
+          article_id = await this.getId('article_id')
+          console.log(article_id)
+        }catch(e){
+          throw new Error(e)
+        }
+      // }
     }catch(err){
       throw Error('添加错误')
     }
@@ -46,8 +56,15 @@ class Article extends BaseComponent{
       result: data
     })
   }
-  getTodayNews(){
+
+  getArticleContent(req, res, next) {
+    let newsUrl = req.query.url
+    Today.getNewsContent(newsUrl)
     
+    res.send({
+      status:1,
+      result: 'success'
+    })
   }
 }
 export default new Article
