@@ -4,6 +4,7 @@ import ArticleModel from '../../models/article/article'
 import BaseComponent from '../../prototype/BaseComponent'
 import moment from 'moment'
 import Today from '../../spider/TodayHeadline'
+import WangYiNews from '../../spider/WangYiNews'
 
 class Article extends BaseComponent{
   constructor(){
@@ -59,12 +60,13 @@ class Article extends BaseComponent{
 
   getArticleContent(req, res, next) {
     let newsUrl = req.query.url
-    Today.getNewsContent(newsUrl)
-    
-    res.send({
-      status:1,
-      result: 'success'
+    WangYiNews.getNewsContent(newsUrl,data => {
+      res.send({
+        status: 1,
+        data
+      })
     })
+    
   }
 }
 export default new Article
