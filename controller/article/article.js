@@ -57,7 +57,7 @@ class Article extends BaseComponent{
       result: data
     })
   }
-
+  //获取文章内容
   getArticleContent(req, res, next) {
     let newsUrl = req.query.url
     WangYiNews.getNewsContent(newsUrl,data => {
@@ -67,6 +67,10 @@ class Article extends BaseComponent{
       })
     })
     
+  }
+  //获取文章的评论
+  getArticleReply(req, res, next){
+
   }
 }
 export default new Article
