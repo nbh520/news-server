@@ -60,7 +60,8 @@ class Article extends BaseComponent{
   //获取文章内容
   getArticleContent(req, res, next) {
     let newsUrl = req.query.url
-    WangYiNews.getNewsContent(newsUrl,data => {
+    
+    WangYiNews.getNewsContent(newsUrl, data => {
       res.send({
         status: 1,
         data
