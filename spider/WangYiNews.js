@@ -19,6 +19,8 @@ class WangYiNews extends BaseComponent {
         let $ = cheerio.load(body, {
           decodeEntities: false
         })
+        let reply = $('div.content').html()
+        console.log('reply'+reply)
         let data = {
           title: $('h1.title').text(),
           content: $('div.content').html()
