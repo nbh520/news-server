@@ -7,29 +7,6 @@ class WangYiNews extends BaseComponent {
   constructor() {
     super();
   }
-  // getNewsContent(url, callback) {
-  //   const options = {
-  //     method: 'GET',
-  //     url
-  //   }
-    
-  //   request(options, (error, response, body) => {
-  //     if (error) throw new Error(error)
-  //     if (!error && response.statusCode === 200) {
-  //       let $ = cheerio.load(body, {
-  //         decodeEntities: false
-  //       })
-  //       this.getNewsReply(url)
-
-  //       let data = {
-  //         title: $('h1.title').text(),
-  //         content: $('div.content').html()
-  //       }
-  //       callback(data)
-  //     }
-  //   })
-  //   return;
-  // }
 
   async getNewsContent(url,) {
     return new Promise((resolve, reject) => {
@@ -44,7 +21,7 @@ class WangYiNews extends BaseComponent {
           let $ = cheerio.load(body, {
             decodeEntities: false
           })
-          let reply = await this.getNewsReply(url)
+          let reply = await this.getHotReply(url)
           result = {
             title: $('h1.title').text(),
             content: $('div.content').html(),
@@ -56,8 +33,6 @@ class WangYiNews extends BaseComponent {
     });
   }
   /**
-   *
-   *
    * @param {*} attr 排序的属性 如number属性
    * @param {*} rev true表示升序排列，false降序排序
    * @returns

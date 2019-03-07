@@ -60,7 +60,7 @@ class Article extends BaseComponent{
   //获取文章内容
   async getArticleContent(req, res, next) {
     let newsUrl = req.query.url
-    WangYiNews.getHotReply(newsUrl).then(data => {
+    WangYiNews.getNewsContent(newsUrl).then(data => {
       res.send({
         status: 1,
         data
@@ -70,7 +70,7 @@ class Article extends BaseComponent{
   }
 
   //获取文章新评论
-  getArticleContent(req,res, next){
+  getArticleComment(req,res, next){
     
   }
 }
