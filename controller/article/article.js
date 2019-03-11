@@ -10,6 +10,7 @@ class Article extends BaseComponent{
   constructor(){
     super()
     this.addArticle = this.addArticle.bind(this)
+    this.getCurrentNews = this.getCurrentNews.bind(this)
   }
   async addArticle(req, res, next){
     let result = await this.fetch('http://www.toutiao.com/api/pc/feed/?category=news_tech&utm_source=toutiao&widen=1&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A155493CA8EBB0F&cp=59C84BEB601F7E1')
@@ -72,6 +73,31 @@ class Article extends BaseComponent{
   //获取文章新评论
   getArticleComment(req,res, next){
     
+  }
+  //获取实时新闻
+  async getCurrentNews(req, res, next){
+    let result = await this.fetch('http://c.3g.163.com/nc/article/list/T1467284926140/0-20.html')
+    
+    Object.keys(result).forEach(key => {
+      result = result[key]
+    })
+    let data = []
+    result.forEach(item => {
+      let obj = {
+        source: item.source, //新闻来源
+        title: item.title, //新闻标题
+        image: item.imgsrc, //封面图片
+        ctime: item.ptime, //创建时间
+        lmodify: item.lmodify, //修改时间
+        replyCount: item.replyCount, //回复评论数
+        description: item.digest,  // 描述
+      }
+      data.push(obj)     
+    })
+    res.send({
+      status: 0,
+      data
+    })
   }
 }
 export default new Article
