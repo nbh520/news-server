@@ -54,14 +54,24 @@ export default class BaseComponent{
     try{
       const idData = await Ids.findOne();
       idData[type]++;
-      idData.save();
-      console.log("执行:" + idData[type])
+      await idData.save();
       return idData[type]
     }catch(err){
       console.log('获取ID数据失败');
       throw new Error(err)
     }
   }
+
+  //查找某张表里某个键是否有某个值
+  async findIsValue(Model, option){
+    try{
+      const data = await Model.find(option)
+      return data.length 
+    }catch(err){
+      throw Error('查询错误') 
+    }
+  }
+
   getIds(type) {
     try {
       const idData = Ids.findOne();

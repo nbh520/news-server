@@ -4,7 +4,6 @@ const ajax = require('../api/ajax')
 const request = require('request')
 const cheerio = require('cheerio')
 const WangYiSpider = require('../spider/wangyi_news')
-// const admin = require('./admin')
 import admin from './admin'
 import test from './test'
 import article from './article'
