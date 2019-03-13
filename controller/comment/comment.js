@@ -10,12 +10,16 @@ class Comment extends BaseComponent{
   //将新闻评论添加进数据库
   async addNewsComment(req, res, next) {
     let comment = req.body.comment
-    for(let i  of comment){
-      i.id = await this.getId('comment_id')
-      i.thumbsCount = i.vote
-      i.user_id = i.user_id || 3
-      await CommentModel.create(i)
-    }
+    
+    
+    // for(let i  of comment){
+    //   i.id = await this.getId('comment_id')
+    //   i.thumbsCount = i.vote
+    //   i.user_id = i.user_id || 3
+    //   i.create_time = i.update_time = i.createTime
+    //   i.article_id = i.source_id
+    //   await CommentModel.create(i)
+    // }
 
     res.send("success")
   }

@@ -5,9 +5,9 @@ const Schema = mongoose.Schema
 
 const commentSchema = new Schema({
   id: Number,
-  article_id: Number, //评论文章id
-  to_uid: Number,    //评论目标人的id，如果没有目标人，则该字段为空
-  user_id: Number,   //评论人id
+  article_id: String, //评论文章id
+  to_uid: {type: String, default: null},    //评论目标人的id，如果没有目标人，则该字段为空
+  user_id: {type: String, default: null},   //评论人id
   content: String,  //评论内容
   create_time: String, //创建时间
   update_time: String, //修改时间

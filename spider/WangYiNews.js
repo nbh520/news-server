@@ -67,9 +67,9 @@ class WangYiNews extends BaseComponent {
     //提取URL中最后的docid值
     let num = url.lastIndexOf("\/")
     let num1 = url.lastIndexOf(".")
-    let str = url.substring(num, num1)
-    let newUrl = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads${str}/comments/newList`
-    let HotCommentUrl = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads${str}/comments/hotList`
+    let str = url.substring(num + 1, num1)
+    let newUrl = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/${str}/comments/newList`
+    let HotCommentUrl = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/${str}/comments/hotList`
     let HotCommentData = await this.fetch(HotCommentUrl)
     let replyArr = [];
      for (let i in HotCommentData.comments) {
@@ -79,6 +79,7 @@ class WangYiNews extends BaseComponent {
          createTime: HotCommentData.comments[i].createTime, //创建时间
          vote: HotCommentData.comments[i].vote, //点赞数
          nickname: HotCommentData.comments[i].user.nickname || '游客', //用户名
+         source_id: str
        }
        replyArr.push(obj)
      }
@@ -88,7 +89,8 @@ class WangYiNews extends BaseComponent {
   //根据Id 获取热评
   async getIdHotComment(id){
     let url = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/${id}/comments/hotList`
-    console.log(url)
+    let HotCommentData = await this.fetch(url)
+    return HotCommentData.comments
   }
 }
 export default new WangYiNews

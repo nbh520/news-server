@@ -84,8 +84,7 @@ class Article extends BaseComponent{
         status: 1,
         data
       })
-      //评论添加进数据库
-      ajax('http://localhost:4001/comment/addNewsComment',{comment: data.reply},'POST')
+      
     })
   }
 
@@ -94,7 +93,10 @@ class Article extends BaseComponent{
   //获取新闻评论
   async getNewsComment(id, source){
     if(source === '网易'){
-      WangYiNews.getIdHotComment(id)
+      let hotComments = await WangYiNews.getIdHotComment(id)
+      //评论添加进数据库
+      ajax('http://localhost:4001/comment/addNewsComment', {comment: hotComments }, 'POST')
+      console.log(hotComments)
     }
   }
 
