@@ -5,11 +5,11 @@ import BaseComponent from '../../prototype/BaseComponent'
 import moment from 'moment'
 import Today from '../../spider/TodayHeadline'
 import WangYiNews from '../../spider/WangYiNews'
+import ajax from '../../api/ajax'
 
 class Article extends BaseComponent{
   constructor(){
     super()
-    // this.addArticle = this.addArticle.bind(this)
     this.getCurrentNews = this.getCurrentNews.bind(this)
     this.addNews = this.addNews.bind(this)
     this.getNews = this.getNews.bind(this)
@@ -17,36 +17,7 @@ class Article extends BaseComponent{
   test(req, res, next) {
     res.send('success')
   }
-  async addArticle(req, res, next){
-  //   let result = await this.fetch('http://www.toutiao.com/api/pc/feed/?category=news_tech&utm_source=toutiao&widen=1&max_behot_time=0&max_behot_time_tmp=0&tadrequire=true&as=A155493CA8EBB0F&cp=59C84BEB601F7E1')
-  //   let data = result.data
 
-  //   try{
-  //     // data.forEach(data => {
-  //     //   const article_id = this.getId('article_id').then(res => console.log('result ' + res))
-  //     //   // let newArticle = {
-  //     //   //   id: article_id,
-  //     //   //   create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-  //     //   //   update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-  //     //   //   author: data.source,
-  //     //   //   title: data.title,
-  //     //   //   source_id: data.item_id,
-  //     //   //   user_id: 0,
-  //     //   //   coverImg: data.image_list,
-  //     //   //   category: '暂无',
-  //     //   //   content: data.source_url
-  //     //   // }
-  //     //   // await ArticleModel.create(newArticle)
-  //     //   // console.log('result ' + article_id)
-  //     // })
-  //   }catch(err){
-  //     throw Error('添加错误')
-  //   }
-  //   res.send({
-  //     status: 1,
-  //     result: data
-  //   })
-  }
   //添加新闻到数据库
   async addNews(data) {
     if(data instanceof Array){
@@ -57,14 +28,14 @@ class Article extends BaseComponent{
             const article_id = await this.getId('article_id')
             i.id = article_id
             await ArticleModel.create(i)
+            //获取该新闻的评论并添加进数据库
+            this.getNewsComment(i.source_id, '网易')
           }             
         }       
       }catch(e){
         throw Error('添加错误')
-      }
-        
+      }  
     }
-    
     return;
   }
 
@@ -91,13 +62,16 @@ class Article extends BaseComponent{
         coverImg: item.imgsrc,
         category: '暂无',
         content: item.url,
-        description: item.digest
+        description: item.digest,
+        avatar: 'http://www.163.com/favicon.ico',
+        source_address: '网易'
       }
       data.push(obj)
     })
+    //新闻添加进数据库
     this.addNews(data)
     res.send({
-      status: 0,
+      status: 1,
       data
     })
   }
@@ -105,22 +79,40 @@ class Article extends BaseComponent{
   //获取文章内容
   async getArticleContent(req, res, next) {
     let newsUrl = req.query.url
-    WangYiNews.getNewsContent(newsUrl).then(data => {
+    WangYiNews.getNewsContent(newsUrl).then(async data => {
       res.send({
         status: 1,
         data
       })
+      //评论添加进数据库
+      ajax('http://localhost:4001/comment/addNewsComment',{comment: data.reply},'POST')
     })
-    
   }
 
-  //获取文章新评论
-  getArticleComment(req,res, next){
-    
+
+
+  //获取新闻评论
+  async getNewsComment(id, source){
+    if(source === '网易'){
+      WangYiNews.getIdHotComment(id)
+    }
   }
+
+  //获取新闻内容
+  async getNewsContent(req, res, next){
+    let id = req.query.id
+    let source = req.query.source
+    console.log(source)
+    if(source == '网易'){
+      WangYiNews.getWangYiNewsContent(id)
+      console.log('afsafsaf')
+    }
+    res.send('success')
+  }
+
   //获取实时新闻
   async getCurrentNews(req, res, next){
-    let result = await this.fetch('http://c.3g.163.com/nc/article/list/T1467284926140/0-20.html')
+    let result = await this.fetch('http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html')
     
     Object.keys(result).forEach(key => {
       result = result[key]

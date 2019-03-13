@@ -16,13 +16,12 @@ const articleSchema = new Schema({
   clickCount: {type: Number, default: 0},    //点击量
   favoriteCount: {type: Number, default: 0}, //收藏量
   commentCount: {type: Number, default: 0},  //评论量
-  voteCount: {
-    type: Number,
-    default: 0
-  }, //点赞量
+  voteCount: {type: Number, default: 0}, //点赞量
+  avatar: String, //  作者头像
   category: String,      //分类
   content: String,       //内容
   description: String, //新闻描述
+  source_address: String, // 新闻来源 -------> 网易 - 今日头条
 })
 
 articleSchema.index({id: 1});

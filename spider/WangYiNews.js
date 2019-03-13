@@ -32,6 +32,12 @@ class WangYiNews extends BaseComponent {
       })
     });
   }
+
+  async getWangYiNewsContent(id){
+    let url = "http://3g.163.com/news/19/0313/09/"+ id +".html"
+    console.log(url)
+  }
+
   /**
    * @param {*} attr 排序的属性 如number属性
    * @param {*} rev true表示升序排列，false降序排序
@@ -56,6 +62,7 @@ class WangYiNews extends BaseComponent {
       return 0;
     }
   }
+  //获取网易新闻热评
   async getHotReply(url){
     //提取URL中最后的docid值
     let num = url.lastIndexOf("\/")
@@ -76,6 +83,12 @@ class WangYiNews extends BaseComponent {
        replyArr.push(obj)
      }
     return replyArr.sort(this.sortBy('vote',false))
+  }
+
+  //根据Id 获取热评
+  async getIdHotComment(id){
+    let url = `http://comment.api.163.com/api/v1/products/a2869674571f77b5a0867c3d71db5856/threads/${id}/comments/hotList`
+    console.log(url)
   }
 }
 export default new WangYiNews

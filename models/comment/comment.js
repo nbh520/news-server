@@ -12,6 +12,8 @@ const commentSchema = new Schema({
   create_time: String, //创建时间
   update_time: String, //修改时间
   thumbsCount: {type: Number, default: 0}, //点赞次数
+  avatar: String, //头像
+  nickname: String, //评论人昵称
 })
 
 commentSchema.index({id: 1})
