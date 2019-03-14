@@ -14,6 +14,7 @@ const commentSchema = new Schema({
   thumbsCount: {type: Number, default: 0}, //点赞次数
   avatar: String, //头像
   nickname: String, //评论人昵称
+  sourceId: String, //来源id  == 唯一值
 })
 
 commentSchema.index({id: 1})

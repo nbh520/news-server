@@ -95,8 +95,7 @@ class Article extends BaseComponent{
     if(source === '网易'){
       let hotComments = await WangYiNews.getIdHotComment(id)
       //评论添加进数据库
-      ajax('http://localhost:4001/comment/addNewsComment', {comment: hotComments }, 'POST')
-      console.log(hotComments)
+      ajax('http://localhost:4001/comment/addNewsComment', {comment: hotComments,articleId: id }, 'POST')
     }
   }
 
@@ -104,10 +103,8 @@ class Article extends BaseComponent{
   async getNewsContent(req, res, next){
     let id = req.query.id
     let source = req.query.source
-    console.log(source)
     if(source == '网易'){
       WangYiNews.getWangYiNewsContent(id)
-      console.log('afsafsaf')
     }
     res.send('success')
   }
