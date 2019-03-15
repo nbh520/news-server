@@ -88,11 +88,21 @@ class Article extends BaseComponent{
     })
   }
 
+  /**
+   *
+   * 获取多少条新闻数
+   * @param {新闻条数} limit
+   * @memberof 
+   */
+  async getNewsList(req, res, next) {
+    let limit = req.query.limit
+
+  }
 
 
   //获取新闻评论
   async getNewsComment(id, source){
-    if(source === '网易'){
+    if(source == '网易'){
       let hotComments = await WangYiNews.getIdHotComment(id)
       //评论添加进数据库
       ajax('http://localhost:4001/comment/addNewsComment', {comment: hotComments,articleId: id }, 'POST')
@@ -101,12 +111,17 @@ class Article extends BaseComponent{
 
   //获取新闻内容
   async getNewsContent(req, res, next){
-    let id = req.query.id
+    let url = req.query.url
     let source = req.query.source
-    if(source == '网易'){
-      WangYiNews.getWangYiNewsContent(id)
+    if (source == '网易') {
+      WangYiNews.getNewsContent(url).then(async data => {
+        res.send({
+          status: 1,
+          data
+        })
+      })
     }
-    res.send('success')
+    
   }
 
   //获取实时新闻

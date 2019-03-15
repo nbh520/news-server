@@ -8,7 +8,7 @@ class WangYiNews extends BaseComponent {
     super();
   }
 
-  async getNewsContent(url,) {
+  async getNewsContent(url) {
     return new Promise((resolve, reject) => {
       let result = {}
       const options = {
@@ -25,6 +25,8 @@ class WangYiNews extends BaseComponent {
           result = {
             title: $('h1.title').text(),
             content: $('div.content').html(),
+            time: $('.time').text(),
+            author: $('.source').text(),
             reply
           }
           resolve(result)
@@ -32,6 +34,8 @@ class WangYiNews extends BaseComponent {
       })
     });
   }
+
+  
 
   async getWangYiNewsContent(id){
     let url = "http://3g.163.com/news/19/0313/09/"+ id +".html"

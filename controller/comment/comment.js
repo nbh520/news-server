@@ -58,7 +58,6 @@ class Comment extends BaseComponent{
   async queryNewsComment(id){
     try{
       const data = await CommentModel.find({article_id: id})
-      console.log(data)
       return data
     }catch(e){
       throw Error('获取新闻评论错误')
