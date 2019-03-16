@@ -13,6 +13,8 @@ class Article extends BaseComponent{
     this.getCurrentNews = this.getCurrentNews.bind(this)
     this.addNews = this.addNews.bind(this)
     this.getNews = this.getNews.bind(this)
+    this.getRandomArrayElements = this.getRandomArrayElements.bind(this)
+    this.getNewsList = this.getNewsList.bind(this)
   }
   test(req, res, next) {
     res.send('success')
@@ -91,23 +93,28 @@ class Article extends BaseComponent{
   /**
    *
    * 获取多少条新闻数
-   * @param {新闻条数} limit
-   * @memberof 
    */
   async getNewsList(req, res, next) {
-    let limit = req.query.limit
-
-  }
-
-
-  //获取新闻评论
-  async getNewsComment(id, source){
-    if(source == '网易'){
-      let hotComments = await WangYiNews.getIdHotComment(id)
-      //评论添加进数据库
-      ajax('http://localhost:4001/comment/addNewsComment', {comment: hotComments,articleId: id }, 'POST')
+    let limit = req.query.limit || 10
+    try{
+      let result = await ArticleModel.find().select({_id: 0}).exec()
+      let data = this.getRandomArrayElements(result, limit)
+      res.send({
+        status: 1,
+        data
+      })
+    }catch(err){
+      res.send({
+        status: 0,
+        type: 'NEWS_GET_ERROR',
+        message: '获取新闻错误'
+      })
     }
+    
   }
+
+
+
 
   //获取新闻内容
   async getNewsContent(req, res, next){
@@ -148,6 +155,34 @@ class Article extends BaseComponent{
       status: 1,
       data
     })
+  }
+
+  //获取新闻评论
+  async getNewsComment(id, source) {
+    if (source == '网易') {
+      let hotComments = await WangYiNews.getIdHotComment(id)
+      //评论添加进数据库
+      ajax('http://localhost:4001/comment/addNewsComment', {
+        comment: hotComments,
+        articleId: id
+      }, 'POST')
+    }
+  }
+
+  //从数组随机选取几个元素
+  getRandomArrayElements(arr, count){
+    let shuffled = arr.slice(0),
+        i = arr.length,
+        min = i - count,
+        temp,
+        index;
+    while(i-- > min){
+      index = Math.floor((i + 1) * Math.random());
+      temp = shuffled[index];
+      shuffled[index] = shuffled[i];
+      shuffled[i] = temp;
+    }
+    return shuffled.slice(min);
   }
 }
 export default new Article

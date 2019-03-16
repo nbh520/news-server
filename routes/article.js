@@ -9,4 +9,5 @@ router.get('/addNews', Article.addNews)
 router.get('/test', Article.test)
 router.get('/getNews', Article.getNews) //获取新闻
 router.get('/getNewsContent', Article.getNewsContent) //获取该新闻内容
+router.get('/getNewsList', Article.getNewsList) //获取多少条新闻
 export default router
