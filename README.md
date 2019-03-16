@@ -48,7 +48,7 @@ nodemon index
 
 ###### 移动端扫描下方二维码
 
-<img src="https://github.com/nbh520/news-server/news.png" width="250" height="250"/>
+<img src="https://github.com/nbh520/news-server/blob/master/news.png" width="250" height="250"/>
 
 ### 后台管理系统地址
 > 暂未开始写
