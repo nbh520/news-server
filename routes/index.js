@@ -4,6 +4,7 @@ import admin from './admin'
 import test from './test'
 import article from './article'
 import comment from './comment'
+import video from './video'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -18,4 +19,5 @@ export default app => {
   app.use('/test',test)
   app.use('/article', article)
   app.use('/comment',comment)
+  app.use('/video', video)
 }
