@@ -1,4 +1,4 @@
-module.exports = async (url = '', data = {}, type = 'GET', method = 'fetch') => {
+export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
   type = type.toUpperCase();
   if (type === 'GET') {
     let dataStr = ''; //字符串拼接
@@ -11,7 +11,8 @@ module.exports = async (url = '', data = {}, type = 'GET', method = 'fetch') => 
       url = url + '?' + dataStr;
     }
   }
-  if (window.fetch && method == 'fetch') {
+  console.log('success')
+  if (method == 'fetch') {
     let requestConfig = {
       credentials: 'include',
       method: type,

@@ -3,7 +3,7 @@ import Ids from '../models/ids'
 
 export default class BaseComponent{
   constructor(){
-    this.idList = ['admin_id','article_id','comment_id']
+    this.idList = ['admin_id','article_id','comment_id','video_id']
   }
   async fetch(url = '', data = {}, type = 'GET', resType = 'JSON'){
     type = type.toUpperCase()
@@ -26,10 +26,11 @@ export default class BaseComponent{
       }
     }
     if(type === 'POST'){
-      Object.defineProperties(requestConfig, 'body', {
+      Object.defineProperty(requestConfig, 'body', {
         value: JSON.stringify(data)
       })
     }
+
     let responseJson
     try{
       const response = await fetch(url, requestConfig)
