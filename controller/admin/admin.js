@@ -13,17 +13,17 @@ class Admin extends AddressComponent {
   }
   //登录
   async login(req, res, next) {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        res.send({
-          status: 0,
-          type: 'FORM_DATA_ERROR',
-          message: '表单信息错误'
-        })
-        return
-      }
-      const {username, password, status = 1} = fields
+    // const form = new formidable.IncomingForm();
+    // form.parse(req, async (err, fields, files) => {
+      // if (err) {
+      //   res.send({
+      //     status: 0,
+      //     type: 'FORM_DATA_ERROR',
+      //     message: '表单信息错误'
+      //   })
+      //   return
+      // }
+      const {username, password, status = 1} = req.body
       try{
         if(!username)
           throw new Error('用户名参数错误')
@@ -40,6 +40,7 @@ class Admin extends AddressComponent {
       const newPassword = this.encryption(password)
       try{
         const admin = await AdminModel.findOne({username})
+        const tokens = ['editor-token','admin-token']
         if(!admin){
           const adminTip = status == 1 ? '管理员' : '超级管理员'
           const admin_id = await this.getId('admin_id')
@@ -70,9 +71,12 @@ class Admin extends AddressComponent {
           })
         }else{
           // req.session.admin_id = admin.id
+          
+          console.log(tokens[admin.status - 1])
           res.send({
             status: 1,
-            success: '登录成功'
+            success: '登录成功',
+            data: tokens[admin.status - 1]
           })
         }
       }catch(err){
@@ -84,9 +88,47 @@ class Admin extends AddressComponent {
         console.log(err)
       }
       
+    // })
+  }
+  //获取管理员信息
+  async getAdminInfo(req, res, next){
+    const users = {
+      'admin-token': {
+        roles: ['admin'],
+        introduction: 'I am a super administrator',
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        name: 'Super Admin'
+      },
+      'editor-token': {
+        roles: ['editor'],
+        introduction: 'I am an editor',
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        name: 'Normal Editor'
+      }
+    }
+    const { token } = req.query 
+    const info = users[token]
+    if(info){
+      res.send({
+        status: 1, 
+        data: info
+      })
+    }
+    res.send({
+      status: 0,
+      type: GET_ADMININFO_FAIL,
+      message: '获取管理员信息错误'
+    })
+    
+  }
+
+  //退出管理员
+  async logout(req, res, next){
+    res.send({
+      status: 1, 
+      data: 'success'
     })
   }
-  
   async getPosition(req, res, next){
     const cityInfo = await this.guessPosition(req)
     res.send({

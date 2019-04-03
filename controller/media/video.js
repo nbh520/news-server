@@ -9,6 +9,7 @@ class Video extends BaseComponent{
   constructor(){
     super()
     this.getVideoList = this.getVideoList.bind(this)
+    this.getRecommendVideo = this.getRecommendVideo.bind(this)
   }
 
   //获取视频列表
@@ -78,8 +79,6 @@ class Video extends BaseComponent{
           await this.fetch('http://localhost:4001/video/addVideo', {
             data: obj
           }, 'POST')
-          
-          
           data.push(obj)
         }
         
@@ -87,9 +86,31 @@ class Video extends BaseComponent{
     }
     res.send({
       status: 1,
-      data
+      data: 'success'
     })
   }
+
+  //获取推荐视频
+  async getRecommendVideo(req, res, next){
+    let limit = req.query.limit || 10
+    try{
+      let result = await VideoModel.find().select({_id: 0}).exec()
+      let data = this.getRandomArrayElements(result, limit)
+      res.send({
+        status: 1,
+        data
+      })
+    }catch(err){
+      res.send({
+        status: 0,
+        type: 'GET_VIDEO_ERROR',
+        message: '获取视频错误'
+      })
+      throw new Error('获取推荐视频错误')
+    }
+    await this.fetch('http://localhost:4001/video/getVideoList')
+  }
+  
 
   //视频添加进数据库
   async addVideo(req, res, next){

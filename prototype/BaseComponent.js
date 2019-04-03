@@ -73,5 +73,21 @@ export default class BaseComponent{
     }
   }
 
+    //从数组随机选取几个元素
+   getRandomArrayElements(arr, count) {
+     let shuffled = arr.slice(0),
+       i = arr.length,
+       min = i - count,
+       temp,
+       index;
+     while (i-- > min) {
+       index = Math.floor((i + 1) * Math.random());
+       temp = shuffled[index];
+       shuffled[index] = shuffled[i];
+       shuffled[i] = temp;
+     }
+     return shuffled.slice(min);
+   }
+
 
 }

@@ -6,6 +6,7 @@ import moment from 'moment'
 import Today from '../../spider/TodayHeadline'
 import WangYiNews from '../../spider/WangYiNews'
 import ajax from '../../api/ajax'
+import articleMethod from './articleMethod.js'
 
 class Article extends BaseComponent{
   constructor(){
@@ -49,7 +50,7 @@ class Article extends BaseComponent{
     Object.keys(result).forEach(key => {
       result = result[key]
     })
-    result.forEach(item => {
+    result.forEach(async item => {
       if(!item.url || !item.digest)
         return;
       let obj ={
@@ -68,10 +69,12 @@ class Article extends BaseComponent{
         avatar: 'http://www.163.com/favicon.ico',
         source_address: '网易'
       }
+      //添加进数据库
       data.push(obj)
     })
     //新闻添加进数据库
-    this.addNews(data)
+    articleMethod.createNewsData(data)
+    // this.addNews(data)
     res.send({
       status: 1,
       data
@@ -113,7 +116,10 @@ class Article extends BaseComponent{
     
   }
 
+  // 获取新闻类型
+  async getNewsType(req, res, next){
 
+  }
 
 
   //获取新闻内容
@@ -168,6 +174,76 @@ class Article extends BaseComponent{
       }, 'POST')
     }
   }
+
+  //获取所有新闻
+  async getNewsAllLists(req, res, next){
+    try{
+      let newsList = ArticleModel.find(function(err, docs){
+        if(err){
+          res.send({
+            status: 0,
+            type: 'GET_NWESLIST_FAIL',
+            message: '获取新闻列表错误'
+          })
+        }
+        res.send({
+          status: 1,
+          data: docs
+        })
+      })
+    }catch(err){
+      res.send({
+        status: 0,
+        type: 'GET_NWESLIST_FAIL',
+        message: '获取新闻列表错误'
+      })
+      throw new Error(err)
+    }
+  }
+
+  // 获取全部新闻条数
+  async getALLNewsLength(req, res, next){
+    try{
+      ArticleModel.find(function(err, docs){
+        res.send({
+          status: 1,
+          data: docs.length
+        })
+      })
+    }catch(err){
+      res.send({
+        status: 0,
+        type: 'GET_ALLNEWSLENGTH_FAIL',
+        message: '获取新闻条数错误'
+      })
+    }
+  }
+
+  //根据页数获取指定条新闻
+  async getPageNews(req, res, next) {
+    const { page, limit } = req.body
+    try{
+      let newsList = ArticleModel.find(function(err, docs){
+        let dataArr = docs.slice((page - 1) * limit, (page - 1) * limit + limit)
+        res.send({
+          status: 1,
+          data: {
+            total: docs.length,
+            items: dataArr
+          }
+        })
+      })
+    }catch(err) {
+      res.send({
+        status: 0,
+        type: 'GET_NWESLIST_FAIL',
+        message: '获取新闻错误'
+      })
+      throw Error(err)
+    }
+    
+  }
+
 
   //从数组随机选取几个元素
   getRandomArrayElements(arr, count){
