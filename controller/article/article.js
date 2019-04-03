@@ -95,7 +95,7 @@ class Article extends BaseComponent{
 
   /**
    *
-   * 获取多少条新闻数
+   * 获取新闻条数
    */
   async getNewsList(req, res, next) {
     let limit = req.query.limit || 10
