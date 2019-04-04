@@ -16,6 +16,7 @@ class Article extends BaseComponent{
     this.getNews = this.getNews.bind(this)
     this.getRandomArrayElements = this.getRandomArrayElements.bind(this)
     this.getNewsList = this.getNewsList.bind(this)
+    this.getNewsDayLength = this.getNewsDayLength.bind(this)
   }
   test(req, res, next) {
     res.send('success')
@@ -93,10 +94,7 @@ class Article extends BaseComponent{
     })
   }
 
-  /**
-   *
-   * 获取新闻条数
-   */
+  // 获取新闻条数
   async getNewsList(req, res, next) {
     let limit = req.query.limit || 10
     try{
@@ -114,6 +112,16 @@ class Article extends BaseComponent{
       })
     }
     
+  }
+
+  // 获取？天~现在的新闻条数
+  async getNewsDayLength(req, res, next) {
+    let  day  =  req.query.day || 1
+    let dayArr = await this.getDayLength(ArticleModel, day)
+    res.send({
+      status: 1,
+      data: dayArr
+    })
   }
 
   // 获取新闻类型

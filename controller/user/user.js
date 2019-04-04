@@ -7,6 +7,7 @@ class User extends BaseComponent{
   constructor(){
     super()
     this.addUser = this.addUser.bind(this)
+    this.getUserDayLength = this.getUserDayLength.bind(this)
   }
 
   //添加用户
@@ -34,7 +35,43 @@ class User extends BaseComponent{
     
   }
 
-  
+  // 查询用户分布地区
+  async queryUserAddress(req, res, next) {
+    try{
+      UserModel.find({}, 'address', function (err, docs) {
+        let obj = {}
+        docs.forEach(doc => {
+          let address = doc['address']
+          if (obj.hasOwnProperty(address)) {
+            obj[address] = obj[address] + 1
+          } else {
+            obj[address] = 1
+          }
+        })
+        res.send({
+          status: 1,
+          data: obj
+        })
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'QUERY_ERROR',
+        message: '查询用户分布地区错误:' + err
+      })
+    }  
+  }
+
+  // 获取？天~现在的用户条数
+  async getUserDayLength(req, res, next) {
+    let day = req.query.day || 1
+    let dayArr = await this.getDayLength(UserModel, day)
+    res.send({
+      status: 1,
+      data: dayArr
+    })
+  }
+
   /**
    * @param {查找条件} data.name
    * @param {要查找的键} data.key

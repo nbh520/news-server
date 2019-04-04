@@ -10,6 +10,7 @@ class Video extends BaseComponent{
     super()
     this.getVideoList = this.getVideoList.bind(this)
     this.getRecommendVideo = this.getRecommendVideo.bind(this)
+    this.getVideoDayLength = this.getVideoDayLength.bind(this)
   }
 
   //获取视频列表
@@ -111,7 +112,15 @@ class Video extends BaseComponent{
     await this.fetch('http://localhost:4001/video/getVideoList')
   }
   
-
+  // 获取？天~现在的视频条数
+  async getVideoDayLength(req, res, next) {
+    let day = req.query.day || 1
+    let dayArr = await this.getDayLength(VideoModel, day)
+    res.send({
+      status: 1,
+      data: dayArr
+    })
+  }
   //视频添加进数据库
   async addVideo(req, res, next){
     //获取视频信息

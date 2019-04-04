@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import Ids from '../models/ids'
+import moment from 'moment'
 
 export default class BaseComponent{
   constructor(){
@@ -71,6 +72,30 @@ export default class BaseComponent{
     }catch(err){
       throw Error('查询错误') 
     }
+  }
+
+  // 获取？天~现在的新闻条数
+  async getDayLength(model, day = 1) {
+    let dayArr = []
+    let startDate = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+    let lastData = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+    for(let i = 0; i < day; i++){
+      startDate = moment().subtract(i, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss')
+      lastData = moment().subtract(i, 'days').endOf('day').format('YYYY-MM-DD HH:mm:ss')
+      try {
+        await model.find({
+          create_time: {
+            $gte: startDate,
+            $lte: lastData
+          }
+        }, function (err, docs) {
+          dayArr.push(docs.length)
+        })
+      } catch (err) {
+        throw Error(err)
+      }
+    }
+    return dayArr
   }
 
     //从数组随机选取几个元素

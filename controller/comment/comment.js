@@ -9,6 +9,7 @@ class Comment extends BaseComponent{
     this.updateNewsComment = this.updateNewsComment.bind(this)
     this.getNewsComment = this.getNewsComment.bind(this)
     this.queryNewsComment = this.queryNewsComment.bind(this)
+    this.getCommentDayLength = this.getCommentDayLength.bind(this)
   }
   //将新闻评论添加进数据库
   async addNewsComment(req, res, next) {
@@ -62,6 +63,16 @@ class Comment extends BaseComponent{
     }catch(e){
       throw Error('获取新闻评论错误')
     }
+  }
+
+  // 获取？天~现在的评论条数
+  async getCommentDayLength(req, res, next) {
+    let day = req.query.day || 1
+    let dayArr = await this.getDayLength(CommentModel, day)
+    res.send({
+      status: 1,
+      data: dayArr
+    })
   }
 
   //判断评论是否重复值并添加进数据库

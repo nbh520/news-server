@@ -33,6 +33,7 @@ class articleMethod extends BaseComponent{
       '军事': 'BAI67OGGwangning',
       '军情': 'DE0CGUSJwangning'
     }
+    this.city = ['北京', '武汉', '深圳', '广州', '上海', '杭州', '成都', ]
   }
   async createNewsData(data) {
     if(typeof data == 'undefined') return
@@ -74,7 +75,7 @@ class articleMethod extends BaseComponent{
           create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           password: '123456',
-          address: '中国',
+          address: this.city[Math.floor(Math.random() * (this.city.length + 1) )],
         }
         await UserModel.create(obj)
       }
@@ -91,6 +92,9 @@ class articleMethod extends BaseComponent{
       comment: hotComments,
       articleId: id
     }, 'POST')
+  }
+  test(){
+    console.log('测试')
   }
 }
 
