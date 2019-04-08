@@ -192,7 +192,7 @@ class Article extends BaseComponent{
     
   }
 
-  
+
 
   //获取实时新闻
   async getCurrentNews(req, res, next){
@@ -220,6 +220,25 @@ class Article extends BaseComponent{
     })
   }
 
+  // 根据id删除新闻
+  async deleteIdNews(req, res, next) {
+    const { id } = req.body
+    try{
+      await ArticleModel.remove({ id }, function() {
+        res.send({
+          status: 1,
+          data: 'success'
+        })
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'DELETE_NEWS_FAIL',
+        message: '删除新闻错误'
+      })
+    }
+    
+  }
   //获取新闻评论
   async getNewsComment(id, source) {
     if (source == '网易') {
