@@ -129,6 +129,53 @@ class Article extends BaseComponent{
 
   }
 
+  // 查询某天的所有新闻
+  async queryDayNews(req, res, next) {
+    let day = req.body.day || moment().format('YYYY-MM-DD')
+    day = day + ' 00:00:00'    
+    try{
+      await ArticleModel.find({
+       create_time: {
+         $gte: day,
+         $lte: moment(day, 'YYYY-MM-DD').endOf('day').format('YYYY-MM-DD HH:mm:ss')
+       }
+      },function(err, docs){
+        res.send({
+          status: 1,
+          data: docs
+        })
+      })
+      
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'QUERY_NEWS_ERROR',
+        message: '查询错误'
+      })
+    }
+    
+  }
+
+  // 搜索某个媒体的所有新闻
+  async queryAuthorNews(req, res, next) {
+    const { author } = req.body
+    try {
+      await ArticleModel.find({ author }, function(err, docs) {
+        res.send({
+          status: 1,
+          data: docs
+        })
+      })
+    
+    } catch(err){
+      res.send({
+        status: 0,
+        type: 'QUERYAUTHORNEWS_FAIL',
+        message: '查询错误'
+      })
+    }
+    
+  }
 
   //获取新闻内容
   async getNewsContent(req, res, next){
@@ -144,6 +191,8 @@ class Article extends BaseComponent{
     }
     
   }
+
+  
 
   //获取实时新闻
   async getCurrentNews(req, res, next){

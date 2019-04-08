@@ -14,4 +14,6 @@ router.post('/getNewsAllLists', Article.getNewsAllLists) //获取所有新闻并
 router.post('/getPageNews', Article.getPageNews) //根据页数获取指定条新闻
 router.get('/getALLNewsLength', Article.getALLNewsLength) // 获取全部新闻的条数
 router.get('/getNewsDayLength', Article.getNewsDayLength) // 获取？天~现在的每天新闻条数
+router.post('/queryDayNews', Article.queryDayNews) // 查询某天的所有新闻
+router.post('/queryAuthorNews', Article.queryAuthorNews) // 查询某个作者的所有新闻
 export default router
