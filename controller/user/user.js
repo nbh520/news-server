@@ -63,7 +63,7 @@ class User extends BaseComponent{
   }
 
    // 获取全部用户条数
-   async getALLVideoLength(req, res, next) {
+   async getALLUserLength(req, res, next) {
      try {
        await UserModel.find(function (err, docs) {
          res.send({
