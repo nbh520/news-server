@@ -62,6 +62,25 @@ class User extends BaseComponent{
     }  
   }
 
+   // 获取全部用户条数
+   async getALLVideoLength(req, res, next) {
+     try {
+       await UserModel.find(function (err, docs) {
+         res.send({
+           status: 1,
+           data: docs.length
+         })
+       })
+     } catch (err) {
+       res.send({
+         status: 0,
+         type: 'GET_ALLNEWSLENGTH_FAIL',
+         message: '获取用户条数错误'
+       })
+     }
+   }
+   
+
   // 获取？天~现在的用户条数
   async getUserDayLength(req, res, next) {
     let day = req.query.day || 1

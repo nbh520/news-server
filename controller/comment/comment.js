@@ -40,6 +40,25 @@ class Comment extends BaseComponent{
     })
   }
 
+  // 获取全部评论条数
+  async getALLCommentLength(req, res, next) {
+    try {
+      await CommentModel.find(function (err, docs) {
+        res.send({
+          status: 1,
+          data: docs.length
+        })
+      })
+    } catch (err) {
+      res.send({
+        status: 0,
+        type: 'GET_ALLNEWSLENGTH_FAIL',
+        message: '获取评论条数错误'
+      })
+    }
+  }
+
+
   //获取新闻评论
   async getNewsComment(req, res, next){
     let id = req.query.id

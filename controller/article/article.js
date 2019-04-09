@@ -239,6 +239,26 @@ class Article extends BaseComponent{
     }
     
   }
+
+  // 查询时间段的新闻
+  async queryTimeNews(req, res, next) {
+    const { startTime, lastTime } = req.body
+    try{
+      await ArticleModel.find({ create_time: {$gte: startTime, $lte: lastTime}}, function(err, docs){
+        res.send({
+          status: 1,
+          data: docs
+        })
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'QUERY_TIMENEWS_FAIL',
+        message: '查询某个时间段新闻错误'
+      })
+    }
+  }
+
   //获取新闻评论
   async getNewsComment(id, source) {
     if (source == '网易') {

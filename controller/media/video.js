@@ -142,6 +142,23 @@ class Video extends BaseComponent{
     
   }
 
+  // 获取全部视频条数
+  async getALLVideoLength(req, res, next) {
+    try {
+      await VideoModel.find(function (err, docs) {
+        res.send({
+          status: 1,
+          data: docs.length
+        })
+      })
+    } catch (err) {
+      res.send({
+        status: 0,
+        type: 'GET_ALLNEWSLENGTH_FAIL',
+        message: '获取视频条数错误'
+      })
+    }
+  }
 }
 
 export default new Video
