@@ -17,4 +17,5 @@ router.get('/getNewsDayLength', Article.getNewsDayLength) // 获取？天~现在
 router.post('/queryDayNews', Article.queryDayNews) // 查询某天的所有新闻
 router.post('/queryAuthorNews', Article.queryAuthorNews) // 查询某个作者的所有新闻
 router.post('/queryTimeNews', Article.queryTimeNews) // 查询某个时间段的新闻
+router.get('/getNewsById', Article.getNewsById) // 根据id获取新闻数据
 export default router

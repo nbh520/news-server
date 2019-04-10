@@ -33,7 +33,7 @@ class articleMethod extends BaseComponent{
       '军事': 'BAI67OGGwangning',
       '军情': 'DE0CGUSJwangning'
     }
-    this.city = ['北京', '武汉', '深圳', '广州', '上海', '杭州', '成都', ]
+    this.city = ['北京', '武汉', '深圳', '广州', '上海', '杭州', '成都', '深圳', '北京', '上海', '深圳', '北京', '深圳' ]
   }
   async createNewsData(data) {
     if(typeof data == 'undefined') return
@@ -75,7 +75,7 @@ class articleMethod extends BaseComponent{
           create_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           update_time: moment().format('YYYY-MM-DD HH:mm:ss'),
           password: '123456',
-          address: this.city[Math.floor(Math.random() * (this.city.length + 1) )],
+          address: this.city[Math.floor(Math.random() * this.city.length )],
         }
         await UserModel.create(obj)
       }
@@ -93,6 +93,13 @@ class articleMethod extends BaseComponent{
       articleId: id
     }, 'POST')
   }
+
+  // 根据网易新闻url获取新闻内容
+  async getNewsContentByWY(url){
+    let result = await WangYiNews.getNewsContent(url)
+    return result
+  }
+
   test(){
     console.log('测试')
   }

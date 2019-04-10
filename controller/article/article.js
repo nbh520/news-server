@@ -259,6 +259,29 @@ class Article extends BaseComponent{
     }
   }
 
+  // 根据id获取新闻内容
+  async getNewsById(req, res, next) {
+    const { id } = req.query
+    try {
+      await ArticleModel.find({id}, async (err, docs) => {
+        let data = docs[0]
+        const { content } = await articleMethod.getNewsContentByWY(docs[0].content)
+        data.content = content
+        res.send({
+          status: 1,
+          data
+        })
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'GET_NEWS_FAIL',
+        message: '获取新闻出错'
+      })
+      throw new Error(err)
+    }
+  }
+
   //获取新闻评论
   async getNewsComment(id, source) {
     if (source == '网易') {
