@@ -18,8 +18,22 @@ class Article extends BaseComponent{
     this.getNewsList = this.getNewsList.bind(this)
     this.getNewsDayLength = this.getNewsDayLength.bind(this)
   }
-  test(req, res, next) {
-    res.send('success')
+  async test(req, res, next) {
+    try {
+      await ArticleModel.update({}, {
+        status: 'published'
+      },{multi: true}, (err, raw) => {
+        res.send({
+          status: 1,
+          data: 'success'
+        })
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        data: 'fail'
+      })
+    }
   }
 
   //添加新闻到数据库

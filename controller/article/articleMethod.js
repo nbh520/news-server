@@ -97,6 +97,7 @@ class articleMethod extends BaseComponent{
   // 根据网易新闻url获取新闻内容
   async getNewsContentByWY(url){
     let result = await WangYiNews.getNewsContent(url)
+    result.content = result.content.replace(/data-src/g, 'src')
     return result
   }
 

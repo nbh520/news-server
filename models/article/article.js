@@ -22,6 +22,7 @@ const articleSchema = new Schema({
   content: String,       //内容
   description: String, //新闻描述
   source_address: String, // 新闻来源 -------> 网易 - 今日头条
+  status: { type: String, default: 'published'}
 })
 
 articleSchema.index({id: 1});
