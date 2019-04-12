@@ -2,7 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
+import session from 'express-session'
 var logger = require('morgan');
 var dv = require('./mongodb/db')
 import indexRouter from './routes/index'
@@ -28,8 +28,13 @@ app.all('*', function (req, res, next) {
   //Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
   res.header('Access-Control-Allow-Headers', 'Content-Type,X-Token');
   res.header('Access-Control-Allow-Methods', '*');
-  res.header('Content-Type', 'application/json;charset=utf-8');
-  next();
+  // res.header('Content-Type', 'application/json;charset=utf-8');
+  // if (req.method == 'OPTIONS') {
+  //   res.sendStatus(200);
+  // } else {
+  //   next();
+  // }
+  next()
 });
 
 
@@ -43,11 +48,16 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+  },
+}))
 
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-
+app.use('/news', express.static('public'))
 
 
 

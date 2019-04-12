@@ -7,6 +7,8 @@ import Today from '../../spider/TodayHeadline'
 import WangYiNews from '../../spider/WangYiNews'
 import ajax from '../../api/ajax'
 import articleMethod from './articleMethod.js'
+import path from 'path'
+import formidable from 'formidable'
 
 class Article extends BaseComponent{
   constructor(){
@@ -19,21 +21,10 @@ class Article extends BaseComponent{
     this.getNewsDayLength = this.getNewsDayLength.bind(this)
   }
   async test(req, res, next) {
-    try {
-      await ArticleModel.update({}, {
-        status: 'published'
-      },{multi: true}, (err, raw) => {
-        res.send({
-          status: 1,
-          data: 'success'
-        })
-      })
-    } catch(err) {
-      res.send({
-        status: 0,
-        data: 'fail'
-      })
-    }
+    res.send({
+      status: 1,
+      data: req.session
+    })
   }
 
   //添加新闻到数据库
@@ -235,14 +226,16 @@ class Article extends BaseComponent{
   }
 
   // 根据id删除新闻
-  async deleteIdNews(req, res, next) {
+  async deleteNewsById(req, res, next) {
     const { id } = req.body
     try{
-      await ArticleModel.remove({ id }, function() {
-        res.send({
-          status: 1,
-          data: 'success'
-        })
+      await ArticleModel.update({id}, {status: 'del'}, (err, raw) => {
+        if(raw){
+          res.send({
+            status: 1,
+            data: 'success'
+          })
+        }
       })
     } catch(err) {
       res.send({
@@ -251,7 +244,29 @@ class Article extends BaseComponent{
         message: '删除新闻错误'
       })
     }
-    
+  }
+
+  // 根据id改变新闻的status值
+  async updateNewsStatusById(req, res, next) {
+    const { id, status } = req.body
+    try{
+      await ArticleModel.update({id}, {status}, (err, raw) => {
+        if(raw){
+          res.send({
+            status: 1,
+            data: 'success'
+          })
+        }
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'UPDATE_NEWS_FAIL',
+        message: '改变新闻状态失败'
+      })
+      throw new Error(err)
+    }
+
   }
 
   // 查询时间段的新闻
@@ -377,6 +392,21 @@ class Article extends BaseComponent{
     
   }
 
+  //接收上传封面图
+  async uploadCoverImage(req, res, next) {
+    let form = new formidable.IncomingForm()
+    form.encoding = 'utf-8' // 编码
+    form.keepExtensions = true // 保留扩展名
+    form.uploadDir = path.join(__dirname, '../../public/images/')
+    form.parse(req, (err, fields, files) => {
+      if (err) return next(err)
+      console.log(files) //上传文件用files.<name>访问
+      res.json({
+        code: 1,
+        message: 'upload success'
+      })
+    })
+  }
 
   //从数组随机选取几个元素
   getRandomArrayElements(arr, count){

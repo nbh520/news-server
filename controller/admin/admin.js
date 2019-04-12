@@ -8,21 +8,11 @@ class Admin extends AddressComponent {
   constructor() {
     super()
     this.login = this.login.bind(this)
+    this.getAdminInfo = this.getAdminInfo.bind(this)
     this.encryption = this.encryption.bind(this)
-    this.getPosition = this.getPosition.bind(this)
   }
   //登录
   async login(req, res, next) {
-    // const form = new formidable.IncomingForm();
-    // form.parse(req, async (err, fields, files) => {
-      // if (err) {
-      //   res.send({
-      //     status: 0,
-      //     type: 'FORM_DATA_ERROR',
-      //     message: '表单信息错误'
-      //   })
-      //   return
-      // }
       const {username, password, status = 1} = req.body
       try{
         if(!username)
@@ -70,8 +60,8 @@ class Admin extends AddressComponent {
             message: '密码错误'
           })
         }else{
-          // req.session.admin_id = admin.id
-          
+          req.session.admin_id = 'admin.id'
+          console.log(req.session)
           console.log(tokens[admin.status - 1])
           res.send({
             status: 1,
@@ -108,6 +98,7 @@ class Admin extends AddressComponent {
     }
     const { token } = req.query 
     const info = users[token]
+    this.getToken()
     if(info){
       res.send({
         status: 1, 
@@ -116,7 +107,7 @@ class Admin extends AddressComponent {
     }
     res.send({
       status: 0,
-      type: GET_ADMININFO_FAIL,
+      type: 'GET_ADMININFO_FAIL',
       message: '获取管理员信息错误'
     })
     
@@ -129,12 +120,7 @@ class Admin extends AddressComponent {
       data: 'success'
     })
   }
-  async getPosition(req, res, next){
-    const cityInfo = await this.guessPosition(req)
-    res.send({
-      success: 'cityInfo'
-    })
-  }
+
 
   encryption(password){
     const newPassword = this.Md5(this.Md5(password).substr(2, 7) + this.Md5(password))

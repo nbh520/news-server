@@ -27,15 +27,11 @@ class Test extends BaseComponent {
 
     });
   }
-  update(){
-    let wherestr = {'username': 'test'};
-    let updatestr = {'password':'123'}
-    Admin.update(wherestr,updatestr,function(err, res){
-      if (err) {
-        console.log("Error:" + err);
-      } else {
-        console.log("Res:" + res);
-      }
+  test(req, res, next){
+    req.session.sessionTest = 'xxx'
+    res.send({
+      status: 1,
+      data: req.session
     })
   }
 }

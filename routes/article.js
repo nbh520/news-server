@@ -18,4 +18,7 @@ router.post('/queryDayNews', Article.queryDayNews) // 查询某天的所有新�
 router.post('/queryAuthorNews', Article.queryAuthorNews) // 查询某个作者的所有新闻
 router.post('/queryTimeNews', Article.queryTimeNews) // 查询某个时间段的新闻
 router.get('/getNewsById', Article.getNewsById) // 根据id获取新闻数据
+router.post('/deleteNewsById', Article.deleteNewsById) //根据id删除新闻
+router.post('/updateNewsStatusById', Article.updateNewsStatusById) // 根据id改变新闻的status值
+router.post('/uploadCoverImage', Article.uploadCoverImage) // 接收封面图
 export default router

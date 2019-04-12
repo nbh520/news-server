@@ -114,5 +114,9 @@ export default class BaseComponent{
      return shuffled.slice(min);
    }
 
+   // 获取token
+   getToken() {
+     console.log('success')
+   }
 
 }
