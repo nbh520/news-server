@@ -8,6 +8,7 @@ import WangYiNews from '../../spider/WangYiNews'
 import ajax from '../../api/ajax'
 import articleMethod from './articleMethod.js'
 import path from 'path'
+import fs from 'fs'
 import formidable from 'formidable'
 
 class Article extends BaseComponent{
@@ -19,6 +20,7 @@ class Article extends BaseComponent{
     this.getRandomArrayElements = this.getRandomArrayElements.bind(this)
     this.getNewsList = this.getNewsList.bind(this)
     this.getNewsDayLength = this.getNewsDayLength.bind(this)
+    this.uploadCoverImage = this.uploadCoverImage.bind(this)
   }
   async test(req, res, next) {
     res.send({
@@ -394,17 +396,10 @@ class Article extends BaseComponent{
 
   //接收上传封面图
   async uploadCoverImage(req, res, next) {
-    let form = new formidable.IncomingForm()
-    form.encoding = 'utf-8' // 编码
-    form.keepExtensions = true // 保留扩展名
-    form.uploadDir = path.join(__dirname, '../../public/images/')
-    form.parse(req, (err, fields, files) => {
-      if (err) return next(err)
-      console.log(files) //上传文件用files.<name>访问
-      res.json({
-        code: 1,
-        message: 'upload success'
-      })
+    let imgUrl = await this.uploadImage(req, res)
+    res.send({
+      status: 1,
+      data: imgUrl
     })
   }
 

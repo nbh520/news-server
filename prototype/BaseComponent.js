@@ -1,6 +1,9 @@
 import fetch from 'node-fetch'
 import Ids from '../models/ids'
 import moment from 'moment'
+import path from 'path'
+import fs from 'fs'
+import formidable from 'formidable'
 
 export default class BaseComponent{
   constructor(){
@@ -114,9 +117,33 @@ export default class BaseComponent{
      return shuffled.slice(min);
    }
 
-   // 获取token
-   getToken() {
-     console.log('success')
+   // 上传照片
+   uploadImage(req, res) {
+     return new Promise((resolve, reject) => {
+       let form = new formidable.IncomingForm()
+       form.encoding = 'utf-8' // 编码
+       form.keepExtensions = true // 保留扩展名
+       form.uploadDir = path.join(__dirname, '../public/images/')
+       form.parse(req, (err, fields, files) => {
+         if (err) return next(err)
+         const hasName = (new Date().getTime() + Math.ceil(Math.random() * 10000)).toString(16)
+         const extname = path.extname(files.file.name)
+         // 验证格式
+         if (!['.jpg', 'jpeg', '.png', '.gif'].includes(extname)) {
+           res.send({
+             status: 0,
+             type: 'ERROR_EXTNAME',
+             message: '文件格式错误'
+           })
+           reject('文件格式错误')
+         } else {
+           const fullName = hasName + extname
+           const rePath = './public/images/' + fullName
+           fs.renameSync(files.file.path, rePath)
+           resolve(fullName)
+         }
+       })
+     })
    }
 
 }
