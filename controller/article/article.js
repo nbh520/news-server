@@ -23,9 +23,10 @@ class Article extends BaseComponent{
     this.uploadCoverImage = this.uploadCoverImage.bind(this)
   }
   async test(req, res, next) {
+    let data = articleMethod.getAllTypeNews()
     res.send({
       status: 1,
-      data: req.session
+      data
     })
   }
 
@@ -82,6 +83,8 @@ class Article extends BaseComponent{
     })
     //新闻添加进数据库
     articleMethod.createNewsData(data)
+    // 将所有类型新闻添加进数据库
+    articleMethod.getAllTypeNews()
     // this.addNews(data)
     res.send({
       status: 1,

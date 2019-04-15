@@ -98,7 +98,7 @@ class Admin extends AddressComponent {
     }
     const { token } = req.query 
     const info = users[token]
-    this.getToken()
+    // this.getToken()
     if(info){
       res.send({
         status: 1, 

@@ -4,21 +4,8 @@ import UserModel from '../../models/user/user'
 import BaseComponent from '../../prototype/BaseComponent'
 import moment from 'moment'
 import WangYiNews from '../../spider/WangYiNews'
+import { ajax } from '../../api/ajax'
 
-// 获取新闻的类型的URL
-// export function getNewsType(){
-//   const type = {
-//     '娱乐': 'BA10TA81wangning',
-//     '电视': 'BD2A86BEwangning',
-//     '电影': 'BD2A9LEIwangning',
-//     '明星': 'BD2AB5L9wangning',
-//     '音乐': 'BD2AC4LMwangning',
-//     '体育': 'BA8E6OEOwangning',
-//     '财经': 'BA8EE5GMwangning',
-//     '军事': 'BAI67OGGwangning',
-//     '军情': 'DE0CGUSJwangning',
-//   }
-// }
 class articleMethod extends BaseComponent{
   constructor(){
     super()
@@ -33,12 +20,15 @@ class articleMethod extends BaseComponent{
       '军事': 'BAI67OGGwangning',
       '军情': 'DE0CGUSJwangning'
     }
+
     this.city = ['北京', '武汉', '深圳', '广州', '上海', '杭州', '成都', '深圳', '北京', '上海', '深圳', '北京', '深圳' ]
   }
   async createNewsData(data) {
+    let arr = []
     if(typeof data == 'undefined') return
     if(!Array.isArray(data)){
-      data = [].push(data)
+      arr.push(data)
+      data = arr
     }
     try {
       for (let i of data) {
@@ -101,8 +91,37 @@ class articleMethod extends BaseComponent{
     return result
   }
 
+  // 获取所有类型的新闻
+  async getAllTypeNews(){
+    for(let i in this.newsType){
+      let result = await ajax(`https://3g.163.com/touch/reconstruct/article/list/${this.newsType[i]}/0-20.html`)
+      result = eval('this.' + result)[this.newsType[i]]
+      for(let item of result) {
+        let obj = {
+          create_time: item.ptime,
+          update_time: item.ptime,
+          commentCount: item.commentCount,
+          voteCount: 0,
+          author: item.source,
+          title: item.title,
+          source_id: item.docid,
+          user_id: 1,
+          coverImg: item.imgsrc,
+          category: i,
+          content: item.skipURL || item.url,
+          description: item.digest || item.description || '',
+          avatar: 'http://www.163.com/favicon.ico',
+          source_address: '网易'
+        }
+        await this.createNewsData(obj)
+      }
+    }
+  }
   test(){
     console.log('测试')
+  }
+  artiList(result) {
+    return result
   }
 }
 

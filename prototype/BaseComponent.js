@@ -41,7 +41,11 @@ export default class BaseComponent{
       if(resType === 'TEXT'){
         responseJson = await response.text()
       }else{
-        responseJson = await response.json()
+        try{
+          responseJson = await response.json()
+        } catch(err) {
+          console.log(await response.json())
+        }
       }
     }catch(err){
       console.log("获取http数据失败" + err)

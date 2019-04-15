@@ -1,6 +1,6 @@
-const axios = require('axios')
+import axios from 'axios'
 
-module.exports = function ajax(url = '', data = {}, type = 'GET') {
+export function ajax(url = '', data = {}, type = 'GET') {
   return new Promise(function (resolve, reject) {
     let promise
     if (type === 'GET') {
