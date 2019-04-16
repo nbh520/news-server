@@ -21,4 +21,5 @@ router.get('/getNewsById', Article.getNewsById) // 根据id获取新闻数据
 router.post('/deleteNewsById', Article.deleteNewsById) //根据id删除新闻
 router.post('/updateNewsStatusById', Article.updateNewsStatusById) // 根据id改变新闻的status值
 router.post('/uploadCoverImage', Article.uploadCoverImage) // 接收封面图
+router.post('/queryNewsByCategory', Article.queryNewsByCategory) // 根据新闻类型获取新闻
 export default router

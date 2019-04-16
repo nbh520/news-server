@@ -7,7 +7,7 @@ import formidable from 'formidable'
 
 export default class BaseComponent{
   constructor(){
-    this.idList = ['admin_id','article_id','comment_id','video_id', 'user_id']
+    this.idList = ['admin_id','article_id','comment_id','video_id', 'user_id', 'category_id']
   }
   async fetch(url = '', data = {}, type = 'GET', resType = 'JSON'){
     type = type.toUpperCase()

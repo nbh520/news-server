@@ -18,7 +18,12 @@ class articleMethod extends BaseComponent{
       '体育': 'BA8E6OEOwangning',
       '财经': 'BA8EE5GMwangning',
       '军事': 'BAI67OGGwangning',
-      '军情': 'DE0CGUSJwangning'
+      '军情': 'DE0CGUSJwangning',
+      '健康': 'BDC4QSV3wangning',
+      '科技': 'BA8D4A3Rwangning',
+      '手机': 'BAI6I0O5wangning',
+      '艺术': 'CKKS0BOEwangning',
+      '旅游': 'BEO4GINLwangning'
     }
 
     this.city = ['北京', '武汉', '深圳', '广州', '上海', '杭州', '成都', '深圳', '北京', '上海', '深圳', '北京', '深圳' ]
@@ -97,6 +102,9 @@ class articleMethod extends BaseComponent{
       let result = await ajax(`https://3g.163.com/touch/reconstruct/article/list/${this.newsType[i]}/0-20.html`)
       result = eval('this.' + result)[this.newsType[i]]
       for(let item of result) {
+        // 内容和描述有一个为空时
+        if ((!item.skipURL && !item.url) || (!item.digest && !item.description))
+          continue
         let obj = {
           create_time: item.ptime,
           update_time: item.ptime,
@@ -122,6 +130,21 @@ class articleMethod extends BaseComponent{
   }
   artiList(result) {
     return result
+  }
+  //从数组随机选取几个元素
+  getRandomArrayElements(arr, count) {
+    let shuffled = arr.slice(0),
+      i = arr.length,
+      min = i - count,
+      temp,
+      index;
+    while (i-- > min) {
+      index = Math.floor((i + 1) * Math.random());
+      temp = shuffled[index];
+      shuffled[index] = shuffled[i];
+      shuffled[i] = temp;
+    }
+    return shuffled.slice(min);
   }
 }
 

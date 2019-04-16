@@ -92,6 +92,26 @@ class Article extends BaseComponent{
     })
   }
 
+  // 根据新闻类型获取新闻
+  async queryNewsByCategory(req, res, next) {
+    let { name, limit = 10 } = req.body
+    try {
+      let data = await ArticleModel.find({category:name})
+      data = articleMethod.getRandomArrayElements(data, limit)
+      res.send({
+        status: 1,
+        data
+      })
+    } catch(err) {
+      res.send({
+        status: 0,
+        type: 'QUERY_NEWS_ERR',
+        message: '获取新闻错误'
+      })
+      throw new Error(err)
+    }
+  }
+
   //获取文章内容
   async getArticleContent(req, res, next) {
     let newsUrl = req.query.url

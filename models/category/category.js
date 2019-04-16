@@ -6,5 +6,11 @@ const Schema = mongoose.Schema
 
 const categorySchema = new Schema({
   id: {type: Number, unique: true},
-  name: Number,
+  name: String
 })
+
+categorySchema.index({id: 1})
+
+const category = mongoose.model('category', categorySchema)
+
+export default category
