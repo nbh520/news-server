@@ -11,7 +11,7 @@ class Category extends BaseComponent {
     try {      
       await CategoryModel.find({}, {id: 1, name: 1, _id: 0}, function(err, docs){
         res.send({
-          status: 0,
+          status: 1,
           data: docs
         })
       })

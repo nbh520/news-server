@@ -2,12 +2,43 @@
 
 import UserModel from '../../models/user/user'
 import BaseComponent from '../../prototype/BaseComponent'
+import userMethod from './userMethod'
 
 class User extends BaseComponent{
   constructor(){
     super()
     this.addUser = this.addUser.bind(this)
     this.getUserDayLength = this.getUserDayLength.bind(this)
+  }
+  async login(req, res, next) {
+    let { username, password } = req.body
+    try {
+      let result = await UserModel.find({username})
+      if (password == result[0].password) {
+        res.send({
+          status: 1,
+          data: {
+            nickname: result[0].nickname,
+            avatar: result[0].avatar,
+            userId: result[0].id
+          }
+        })
+      } else {
+        res.send({
+          status: 0,
+          type: 'PASSWORD_ERR',
+          message: '密码错误'
+        })
+      }
+      
+    } catch(err) {
+      throw new Error(err)
+      res.send({
+        status: 0,
+        type: 'LOGIN_ERROR',
+        message: '登录错误'
+      })
+    }
   }
 
   //添加用户
@@ -32,7 +63,6 @@ class User extends BaseComponent{
       })
       throw new Error('添加错误')
     }
-    
   }
 
   // 查询用户分布地区
@@ -111,9 +141,29 @@ class User extends BaseComponent{
         message: '查询用户表失败'
       })
       throw new Error("查询失败")
+    } 
+  }
+
+  // 查询用户的点赞、收藏、评论
+  async queryUserOption(req, res, next) {
+    let { id, filed } = req.body
+    if (['like', 'favorite', 'comment'].includes(filed)) {
+      let data = await userMethod.queryById(id,filed)
+      res.send({
+        status: 1,
+        data
+      })
+    } else {
+      res.send({
+        status: 0,
+        type: 'QUERY_ERROR',
+        message: '查询不符合规范'
+      })
     }
     
   }
+
+
 }
 
 export default new User

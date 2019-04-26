@@ -8,4 +8,6 @@ router.post('/queryValue', User.queryValue) //查询用户表里的某个键值
 router.get('/getUserDayLength', User.getUserDayLength) // 获取？天~现在的用户条数
 router.get('/queryUserAddress', User.queryUserAddress) // 查询用户分布地区
 router.get('/getALLUserLength', User.getALLUserLength) // 获取用户条数
+router.post('/login', User.login) // 用户登录
+router.post('/queryUserOption', User.queryUserOption)  // 查询用户的点赞、收藏、评论
 export default router

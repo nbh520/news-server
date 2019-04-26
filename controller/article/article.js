@@ -120,15 +120,15 @@ class Article extends BaseComponent{
         status: 1,
         data
       })
-      
     })
   }
 
   // 获取新闻条数
   async getNewsList(req, res, next) {
-    let limit = req.query.limit || 10
+    let { limit = 10, category = '暂无'} = req.query
+    if(category === '推荐') category = '暂无'
     try{
-      let result = await ArticleModel.find().select({_id: 0}).exec()
+      let result = await ArticleModel.find({category}).select({_id: 0}).exec()
       let data = this.getRandomArrayElements(result, limit)
       res.send({
         status: 1,
@@ -213,6 +213,12 @@ class Article extends BaseComponent{
     let source = req.query.source
     if (source == '网易') {
       WangYiNews.getNewsContent(url).then(async data => {
+        data.content = data.content.replace(/data-src/g, 'src')
+        let recomment = await ArticleModel.find({author: data.author})
+        if (recomment.length > 4) {
+          recomment = articleMethod.getRandomArrayElements(recomment, 4)
+        }
+        data.recomment = recomment
         res.send({
           status: 1,
           data
