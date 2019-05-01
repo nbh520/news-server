@@ -15,7 +15,9 @@ const userSchema = new Schema({
   address: String,
   favorite: [],  //  用户收藏
   like: [],  	     //  用户点赞
-  comment: []		 //  用户评论
+  comment: [],		 //  用户评论
+  category: [],    // 关注的分类新闻
+  attention: []    // 关注的用户
 })
 
 userSchema.index({

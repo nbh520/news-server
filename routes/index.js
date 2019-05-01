@@ -7,6 +7,7 @@ import comment from './comment'
 import video from './video'
 import user from './user'
 import category from './category'
+import search from './search'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -24,4 +25,5 @@ export default app => {
   app.use('/video', video)
   app.use('/user', user)
   app.use('/category', category)
+  app.use('/search', search)
 }

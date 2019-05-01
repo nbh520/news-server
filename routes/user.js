@@ -10,4 +10,5 @@ router.get('/queryUserAddress', User.queryUserAddress) // 查询用户分布地�
 router.get('/getALLUserLength', User.getALLUserLength) // 获取用户条数
 router.post('/login', User.login) // 用户登录
 router.post('/queryUserOption', User.queryUserOption)  // 查询用户的点赞、收藏、评论
+router.post('/postUserOption', User.postUserOption) // 提价用户的点赞、收藏
 export default router

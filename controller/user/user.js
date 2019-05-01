@@ -20,7 +20,9 @@ class User extends BaseComponent{
           data: {
             nickname: result[0].nickname,
             avatar: result[0].avatar,
-            userId: result[0].id
+            userId: result[0].id,
+            likeList: result[0].like,
+            favoriteList: result[0].favorite
           }
         })
       } else {
@@ -163,6 +165,36 @@ class User extends BaseComponent{
     
   }
 
+  // 提价用户的点赞和收藏
+  async postUserOption(req, res, next) {
+    let { id, likeList, favoriteList } = req.body
+    try {
+      let result = await UserModel.update({id}, {like: likeList, favorite: favoriteList})
+      userMethod.dataCount('voteCount', likeList)
+      userMethod.dataCount('favoriteCount', favoriteList)
+      if (result.ok) {
+        res.send({
+          status: 1,
+          data: 'success'
+        })
+      } else {
+        res.send({
+          status: 0,
+          type: 'POST_USER_OPTION_ERR',
+          message: '提交用户信息出错'
+        })
+      }
+    } catch (err) {
+      throw new Error(err)
+      res.send({
+        status: 0,
+        type: 'POST_USER_OPTION_ERR',
+        message: '提交用户信息出错'
+      })
+    }
+    
+
+  }
 
 }
 
