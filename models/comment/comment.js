@@ -15,6 +15,7 @@ const commentSchema = new Schema({
   avatar: String, //头像
   nickname: String, //评论人昵称
   sourceId: String, //来源id  == 唯一值
+  status: { type: String, default: 'published'} // 评论状态 published：发布，del：删除
 })
 
 commentSchema.index({id: 1})

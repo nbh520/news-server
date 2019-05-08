@@ -7,6 +7,7 @@ import Today from '../../spider/TodayHeadline'
 import WangYiNews from '../../spider/WangYiNews'
 import ajax from '../../api/ajax'
 import articleMethod from './articleMethod.js'
+import CommentModel from '../../models/comment/comment'
 import path from 'path'
 import fs from 'fs'
 import formidable from 'formidable'
@@ -214,15 +215,31 @@ class Article extends BaseComponent{
     if (source == '网易') {
       WangYiNews.getNewsContent(url).then(async data => {
         data.content = data.content.replace(/data-src/g, 'src')
-        let recomment = await ArticleModel.find({author: data.author})
-        if (recomment.length > 4) {
-          recomment = articleMethod.getRandomArrayElements(recomment, 4)
+        try {
+          // 获取该作者的其他作品来做推荐
+          let recomment = await ArticleModel.find({author: data.author})
+          if (recomment.length > 4) {
+            recomment = articleMethod.getRandomArrayElements(recomment, 4)
+          }
+          data.recomment = recomment
+          // 添加数据库中的评论
+          let articleResult = await ArticleModel.find({ content: url })
+          let commentResult = await CommentModel.find({article_id: articleResult[0].id})
+          data.reply.push(...commentResult)
+          data.info = articleResult[0]
+          res.send({
+            status: 1,
+            data
+          })
+        } catch(err) {
+          throw Error(err)
+          res.send({
+            status: 0,
+            type: 'GET_NEWS_ERROR',
+            message: '获取新闻错误'
+          })
         }
-        data.recomment = recomment
-        res.send({
-          status: 1,
-          data
-        })
+        
       })
     }
     

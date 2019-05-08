@@ -1,6 +1,8 @@
 'use strict'
 import CommentModel from '../../models/comment/comment'
 import BaseComponent from '../../prototype/BaseComponent'
+import ArticleModel from '../../models/article/article'
+import moment from 'moment'
 
 class Comment extends BaseComponent{
   constructor(){
@@ -10,6 +12,7 @@ class Comment extends BaseComponent{
     this.getNewsComment = this.getNewsComment.bind(this)
     this.queryNewsComment = this.queryNewsComment.bind(this)
     this.getCommentDayLength = this.getCommentDayLength.bind(this)
+    this.postComment = this.postComment.bind(this)
   }
   //将新闻评论添加进数据库
   async addNewsComment(req, res, next) {
@@ -21,7 +24,7 @@ class Comment extends BaseComponent{
         let obj = {
           id,
           user_id: 3,
-          thumbsCount: comment[i].vote,
+          thumbsCount: comment[i].vote || 0, 
           avatar: comment[i].user.avatar || 'http: //www.163.com/favicon.ico',
           content: comment[i].content,
           nickname: comment[i].user.nickname || '网易用户',
@@ -101,6 +104,59 @@ class Comment extends BaseComponent{
       await CommentModel.create(data)
     }
     return;
+  }
+
+  // 提交评论
+  async postComment(req, res, next) {
+    let { commentData } = req.body
+    const id = await this.getId('comment_id')
+    commentData.create_time = moment().format('YYYY-MM-DD HH:mm:ss')
+    commentData.update_time = moment().format('YYYY-MM-DD HH:mm:ss')
+    commentData.thumbsCount = 0
+    commentData.id = id
+    try {
+      let result = await CommentModel.create(commentData)
+      if (result) {
+        res.send({
+          status: 1,
+          data: 'success'
+        })
+      }
+    } catch(err) {
+      throw new Error(err)
+      res.send({
+        status: 0,
+        type: 'POST_COMMENT_ERROR',
+        message: '提交评论出错'
+      })
+    }
+  }
+
+  // 获取用户评论
+  async getUserComment(req, res, next) {
+    let { id } = req.body
+    try {
+      let data = []
+      let result = await CommentModel.find({ user_id: id })
+      for(let i in result) {
+        let article = await ArticleModel.find({ id: result[i].article_id})
+        data[i] = {
+          article: article[0],
+          comment: result[i]
+        }
+      }
+      res.send({
+        status: 1,
+        data
+      })
+    } catch(err) {
+      throw new Error(err) 
+      res.send({
+        status: 0,
+        type: 'GET_USER_COMMENT_ERROR',
+        message: '获取评论失败'
+      })
+    }
   }
 }
 
