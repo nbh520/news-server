@@ -7,7 +7,7 @@ const Schema = mongoose.Schema
 const userSchema = new Schema({
   id: Number,
   nickname: String,
-  avatar: {type: String, default: 'http://localhost:4001/news/images/avatar/default.png'},
+  avatar: {type: String, default: 'http://39.108.182.105:4001/news/images/avatar/default.png'},
   create_time: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   update_time: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   username: String,

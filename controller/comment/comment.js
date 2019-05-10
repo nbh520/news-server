@@ -138,6 +138,7 @@ class Comment extends BaseComponent{
     try {
       let data = []
       let result = await CommentModel.find({ user_id: id })
+      result = result.filter(item => item.status === 'published')
       for(let i in result) {
         let article = await ArticleModel.find({ id: result[i].article_id})
         data[i] = {
@@ -155,6 +156,35 @@ class Comment extends BaseComponent{
         status: 0,
         type: 'GET_USER_COMMENT_ERROR',
         message: '获取评论失败'
+      })
+    }
+  }
+
+  // 删除用户评论
+  async deleteCommentData(req, res, next) {
+    let { ids } = req.body
+    if (ids.length === 0) {
+      res.send({
+        status: 0,
+        type: 'DELETE_COMMENT_EMPTY',
+        message: '删除用户评论为空'
+      })
+      return
+    }
+    try {
+      for(let id of ids) {
+        await CommentModel.update({ id },{ status: 'del'})
+      }
+      res.send({
+        status: 1,
+        data: 'success'
+      })
+    } catch (err) {
+      throw Error(err)
+      res.send({
+        status: 0,
+        type: 'DELETE_COMMENT_FAIL',
+        message: '删除评论失败'
       })
     }
   }
